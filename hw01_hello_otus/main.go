@@ -7,6 +7,6 @@ import (
 )
 
 func main() {
-	var otus string = "Hello, OTUS!"
+	otus := "Hello, OTUS!"
 	fmt.Println(reverse.String(otus))
 }
