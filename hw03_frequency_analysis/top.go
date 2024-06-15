@@ -8,9 +8,22 @@ import (
 func Top10(src string) []string {
 	var result []string
 	data := make(map[string]int)
+	nums := 10 // количество элементов для возврата.
+
+	replaces := []string{
+		"\n", "\t", "!", ",", ".", "\"", "'",
+	}
+	src = strings.ToLower(src)
+
+	for _, r := range replaces {
+		src = strings.ReplaceAll(src, r, " ")
+	}
 	arr := strings.Split(src, " ")
 	for _, w := range arr {
 		if w == "" {
+			continue
+		}
+		if w == "-" {
 			continue
 		}
 		data[w]++
@@ -23,16 +36,17 @@ func Top10(src string) []string {
 		w1 := result[i]
 		w2 := result[j]
 		switch {
-		case data[w1] > data[w2]:
-			return true
-		case data[w1] == data[w2]:
-			return w1 > w2
-		default:
+		case data[w1] < data[w2]:
 			return false
+		case data[w1] == data[w2]:
+			return w1 < w2
+		default:
+			return true
 		}
 	})
-	if len(result) < 10 {
+
+	if len(result) < nums {
 		return result
 	}
-	return result[:10]
+	return result[:nums]
 }
