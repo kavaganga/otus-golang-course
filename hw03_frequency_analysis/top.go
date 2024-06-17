@@ -10,14 +10,17 @@ func Top10(src string) []string {
 	data := make(map[string]int)
 	nums := 10 // количество элементов для возврата.
 
-	replaces := []string{
-		"\n", "\t", "!", ",", ".", "\"", "'",
-	}
 	src = strings.ToLower(src)
+	r := strings.NewReplacer(
+		"\n", " ",
+		"\t", " ",
+		"!", " ",
+		",", " ",
+		".", " ",
+		"\"", " ",
+		"'", " ")
+	src = r.Replace(src)
 
-	for _, r := range replaces {
-		src = strings.ReplaceAll(src, r, " ")
-	}
 	arr := strings.Split(src, " ")
 	for _, w := range arr {
 		if w == "" {
