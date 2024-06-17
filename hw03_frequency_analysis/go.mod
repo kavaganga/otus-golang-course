@@ -1,4 +1,4 @@
-module github.com/kavaganga/otus-golang-course/pull/new/hw03_frequency_analysis
+module github.com/kavaganga/otus-golang-course/hw03_frequency_analysis
 
 go 1.22
 
