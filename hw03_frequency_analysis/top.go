@@ -22,6 +22,7 @@ func Top10(src string) []string {
 	src = r.Replace(src)
 
 	arr := strings.Split(src, " ")
+	// Подсчет частоты использования
 	for _, w := range arr {
 		if w == "" {
 			continue
@@ -31,10 +32,12 @@ func Top10(src string) []string {
 		}
 		data[w]++
 	}
+
+	// Получение уникальных слов
 	for k := range data {
 		result = append(result, k)
 	}
-
+	// Сортировка по частоте и алфавиту
 	sort.Slice(result, func(i, j int) bool {
 		w1 := result[i]
 		w2 := result[j]
