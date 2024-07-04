@@ -5,8 +5,8 @@ import "sync"
 type Key string
 
 type Cache interface {
-	Set(key Key, value interface{}) bool
-	Get(key Key) (interface{}, bool)
+	Set(key Key, value any) bool
+	Get(key Key) (any, bool)
 	Clear()
 }
 
@@ -25,7 +25,7 @@ func NewCache(capacity int) Cache {
 	}
 }
 
-func (c *lruCache) Set(key Key, value interface{}) bool {
+func (c *lruCache) Set(key Key, value any) bool {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 
@@ -42,7 +42,7 @@ func (c *lruCache) Set(key Key, value interface{}) bool {
 	return ok
 }
 
-func (c *lruCache) Get(key Key) (interface{}, bool) {
+func (c *lruCache) Get(key Key) (any, bool) {
 	c.mu.RLock()
 	defer c.mu.RUnlock()
 
