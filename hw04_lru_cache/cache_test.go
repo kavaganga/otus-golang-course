@@ -1,7 +1,8 @@
 package hw04lrucache
 
 import (
-	"math/rand"
+	"crypto/rand"
+	"math/big"
 	"strconv"
 	"sync"
 	"testing"
@@ -50,13 +51,44 @@ func TestCache(t *testing.T) {
 	})
 
 	t.Run("purge logic", func(t *testing.T) {
-		// Write me
+		c := NewCache(3)
+
+		r := c.Set("1", 100)
+		require.False(t, r)
+
+		r = c.Set("2", 200)
+		require.False(t, r)
+
+		r = c.Set("3", 300)
+		require.False(t, r)
+
+		v, r := c.Get("1")
+		require.True(t, r)
+		require.Equal(t, 100, v)
+
+		v, r = c.Get("2")
+		require.True(t, r)
+		require.Equal(t, 200, v)
+
+		v, r = c.Get("3")
+		require.True(t, r)
+		require.Equal(t, 300, v)
+
+		c.Clear()
+		_, r = c.Get("1")
+		require.False(t, r)
+		_, r = c.Get("2")
+		require.False(t, r)
+		_, r = c.Get("3")
+		require.False(t, r)
 	})
 }
 
 func TestCacheMultithreading(t *testing.T) {
-	t.Skip() // Remove me if task with asterisk completed.
-
+	rnd, err := rand.Int(rand.Reader, big.NewInt(1_000_000))
+	if err != nil {
+		t.Fatal(err)
+	}
 	c := NewCache(10)
 	wg := &sync.WaitGroup{}
 	wg.Add(2)
@@ -71,7 +103,7 @@ func TestCacheMultithreading(t *testing.T) {
 	go func() {
 		defer wg.Done()
 		for i := 0; i < 1_000_000; i++ {
-			c.Get(Key(strconv.Itoa(rand.Intn(1_000_000))))
+			c.Get(Key(strconv.Itoa(int(rnd.Int64()))))
 		}
 	}()
 
