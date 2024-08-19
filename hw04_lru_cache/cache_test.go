@@ -51,36 +51,83 @@ func TestCache(t *testing.T) {
 	})
 
 	t.Run("purge logic", func(t *testing.T) {
-		c := NewCache(3)
+		// Проверяем очистку кэша
+		t.Run("ClearLogic", func(t *testing.T) {
+			c := NewCache(3)
 
-		r := c.Set("1", 100)
-		require.False(t, r)
+			r := c.Set("1", 100)
+			require.False(t, r)
 
-		r = c.Set("2", 200)
-		require.False(t, r)
+			r = c.Set("2", 200)
+			require.False(t, r)
 
-		r = c.Set("3", 300)
-		require.False(t, r)
+			r = c.Set("3", 300)
+			require.False(t, r)
 
-		v, r := c.Get("1")
-		require.True(t, r)
-		require.Equal(t, 100, v)
+			v, r := c.Get("1")
+			require.True(t, r)
+			require.Equal(t, 100, v)
 
-		v, r = c.Get("2")
-		require.True(t, r)
-		require.Equal(t, 200, v)
+			v, r = c.Get("2")
+			require.True(t, r)
+			require.Equal(t, 200, v)
 
-		v, r = c.Get("3")
-		require.True(t, r)
-		require.Equal(t, 300, v)
+			v, r = c.Get("3")
+			require.True(t, r)
+			require.Equal(t, 300, v)
 
-		c.Clear()
-		_, r = c.Get("1")
-		require.False(t, r)
-		_, r = c.Get("2")
-		require.False(t, r)
-		_, r = c.Get("3")
-		require.False(t, r)
+			c.Clear()
+			_, r = c.Get("1")
+			require.False(t, r)
+			_, r = c.Get("2")
+			require.False(t, r)
+			_, r = c.Get("3")
+			require.False(t, r)
+		})
+
+		t.Run("PushLogic", func(t *testing.T) {
+			c := NewCache(3)
+
+			r := c.Set("1", 100)
+			require.False(t, r)
+
+			r = c.Set("2", 200)
+			require.False(t, r)
+
+			r = c.Set("3", 300)
+			require.False(t, r)
+
+			r = c.Set("4", 400)
+			require.False(t, r)
+
+			_, ok := c.Get("1") // Нет в кэше
+			require.False(t, ok)
+		})
+		t.Run("PushLogicOldValue", func(t *testing.T) {
+			c := NewCache(3)
+
+			r := c.Set("1", 100)
+			require.False(t, r)
+
+			r = c.Set("2", 200)
+			require.False(t, r)
+
+			r = c.Set("3", 300)
+			require.False(t, r)
+
+			_, ok := c.Get("2")
+			require.True(t, ok)
+			_, ok = c.Get("1")
+			require.True(t, ok)
+			_, ok = c.Get("3")
+			require.True(t, ok)
+
+			r = c.Set("4", 400)
+			require.False(t, r)
+
+			_, ok = c.Get("2") // Нет в кэше
+			require.False(t, ok)
+		})
 	})
 }
 
